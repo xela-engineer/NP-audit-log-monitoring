@@ -20,5 +20,5 @@ sudo setsid ./script/np_audit_log_montioring.sh >/var/home/core/np_audit_log_mon
 # Kill the Process
 
 ``` sh
-kill $(ps -fade | grep myscript.sh | grep -v grep | awk '{print $2}')
+kill $(ps -fade | grep np_audit_log_montioring.sh | grep -v grep | awk '{print $2}')
 ```
