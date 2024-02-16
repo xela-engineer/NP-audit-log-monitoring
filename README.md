@@ -1,7 +1,7 @@
 # NP-audit-log-monitoring
 
 Monitoring Script for Kubernetes Network Policy Audit log.
-It will keep running on the worker node forever.
+It will keep running on the worker node as daemon forever.
 
 # Assumption
 
