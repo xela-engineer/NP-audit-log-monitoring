@@ -16,9 +16,10 @@ It will keep running on the worker node as daemon forever.
 mkdir -p /var/home/core/np_audit_log_montioring/log/
 touch /var/home/core/np_audit_log_montioring/log/runtime.log
 
-sudo nohup ./script/np_audit_log_montioring.sh </dev/null >/dev/null 2>&1 &
+sudo nohup ./script/np_audit_log_montioring.sh "/var/home/core/np_audit_log_montioring/log/" "smtp://smtp.gmail.com:587" "fromMyEmail@gmail.com" "NP-monitoring-Bot" "recevier@gmail.com" "recevier Name" "smtpPW" </dev/null >/dev/null 2>&1 &
 # OR
-sudo nohup ./script/np_audit_log_montioring.sh </dev/null >/var/home/core/np_audit_log_montioring/log/runtime.log 2>&1 & 
+sudo nohup ./script/np_audit_log_montioring.sh "/var/home/core/np_audit_log_montioring/log/" "smtp://smtp.gmail.com:587" "fromMyEmail@gmail.com" "NP-monitoring-Bot" "recevier@gmail.com" "recevier Name" "smtpPW" </dev/null >/var/home/core/np_audit_log_montioring/log/runtime.log 2>&1 & 
+# E.G. sudo nohup ./script/np_audit_log_montioring.sh "scripts' log directory" "smtp://smtp.gmail.com:587" "fromMyEmail@gmail.com" "MyName" "recevier@gmail.com" "recevier Name" "smtpPW" </dev/null >/var/home/core/np_audit_log_montioring/log/runtime.log 2>&1 & 
 ```
 
 # Kill the Process
