@@ -68,7 +68,7 @@ export -f send_email
 start_monitoring() {
 #  while :; do
   echo "Start tailing log"
-  tail -F --pid=$scriptPID /var/log/ovn/acl-audit-log.log | grep  --line-buffered "flags=psh|ack" | grep  --line-buffered "0a:58:0a:83:00:0f" | xargs -P 8 -I {} bash -c 'send_email "$@"' _ {}
+  tail -F --pid=$scriptPID /var/log/ovn/acl-audit-log.log | grep  --line-buffered "verdict=drop" | xargs -P 8 -I {} bash -c 'send_email "$@"' _ {}
   echo "End tailing log"
 #    break
 #  done
