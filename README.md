@@ -16,13 +16,13 @@ It will keep running on the worker node as daemon forever.
 mkdir -p /var/home/core/np_audit_log_montioring/log/
 touch /var/home/core/np_audit_log_montioring/log/runtime.log
 
-sudo setsid ./script/np_audit_log_montioring.sh >/dev/null 2>&1 < /dev/null &
-# or
-sudo setsid ./script/np_audit_log_montioring.sh >/var/home/core/np_audit_log_montioring/log/runtime.log 2>&1 < /dev/null &
+sudo nohup ./script/np_audit_log_montioring.sh </dev/null >/dev/null 2>&1 &
+# OR
+sudo nohup ./script/np_audit_log_montioring.sh </dev/null >/var/home/core/np_audit_log_montioring/log/runtime.log 2>&1 & 
 ```
 
 # Kill the Process
 
 ``` sh
-kill -9 $(ps -fade | grep np_audit_log_montioring.sh | grep -v grep | awk '{print $2}')
+sudo kill -9 $(ps -fade | grep np_audit_log_montioring.sh | grep -v grep | awk '{print $2}')
 ```
