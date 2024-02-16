@@ -45,7 +45,7 @@ send_email(){
   echo "Detected Alert: $rawLog"
   export TZ='Asia/Hong_Kong'
   time="`date  +'%Y%m%d%H%M'`"
-  tempFileName="$logPath/message-$time.txt"
+  tempFileName="$logPath/message-$time-$RANDOM.txt"
   echo "file name : $tempFileName"
 
   touch $tempFileName
