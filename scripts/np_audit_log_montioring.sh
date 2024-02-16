@@ -1,13 +1,18 @@
 #!/bin/bash
 
+scriptPID=$$
+echo "Script PID : $scriptPID"
+
 # E.G. /var/home/core/np_audit_log_montioring/log/
 export logPath=$1
 # E.G. smtp://smtp.gmail.com:587
 export smtpServer=$2
 # E.G. alex.working.space2@gmail.com
 export smtpUser=$3
-export smtpRcpt=$4
-export smtpPW=$5
+export senderName=$4
+export smtpRcpt=$5
+export rcptName=$6
+export smtpPW=$7
 
 trap cleanup SIGINT SIGTERM ERR EXIT
 
@@ -32,32 +37,45 @@ EOF
 cleanup() {
   trap - SIGINT SIGTERM ERR EXIT
   # script cleanup here
+  exit
 }
 
 send_email(){
-  time=""
-  tempFileName="$logPath/"
-  echo "From: “Robot” <testing@gmail.com>" >> tempFileName
-  echo "To: “AAAA woo” <alex23woo@gmail.com>" >> tempFileName
-  echo "" >> tempFileName
-  echo "Raw Log: {raw_log}" >> tempFileName
+  rawLog=$1
+  echo "Detected Alert: $rawLog"
+  export TZ='Asia/Hong_Kong'
+  time="`date  +'%Y%m%d%H%M'`"
+  tempFileName="$logPath/message-$time.txt"
+  echo "file name : $tempFileName"
 
+  touch $tempFileName
+  echo "From: “$senderName” <$smtpUser>" > tempFileName
+  echo "To: “$rcptName” <$smtpRcpt>" >> tempFileName
+  echo "Subject: Network Policy Deny Log Detected" >> tempFileName
+  echo "" >> tempFileName
+  echo "Raw Log: $rawLog" >> tempFileName
+
+  userAndPW="$smtpUser:$smtpPW"
   curl  --ssl-reqd --url "$smtpServer" \
     --user "$userAndPW" --mail-from "$smtpUser" \
-    --mail-rcpt "$smtpRcpt" --upload-file /var/home/core/np_audit_log_montioring/message.txt
+    --mail-rcpt "$smtpRcpt" --upload-file tempFileName
 
+  rm $tempFileName
 }
 
+export -f send_email
+
 start_monitoring() {
-  while :; do
-    echo "Start tailing log"
-    tail -f /var/log/ovn/acl-audit-log.log | grep  --line-buffered "flags=psh|ack" | grep  --line-buffered "0a:58:0a:83:00:0f" | xargs -I {} echo "Detected Alert: {}"
-    echo "End tailing log"
-  done
+#  while :; do
+  echo "Start tailing log"
+  tail -F --pid=$scriptPID /var/log/ovn/acl-audit-log.log | grep  --line-buffered "flags=psh|ack" | grep  --line-buffered "0a:58:0a:83:00:0f" | xargs -P 8 -I {} bash -c 'send_email "$@"' _ {}
+  echo "End tailing log"
+#    break
+#  done
 
   return 0
 }
 
 echo "logpath : $logPath"
-send_email
+
 start_monitoring
