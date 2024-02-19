@@ -7,7 +7,7 @@ echo "Script PID : $scriptPID"
 export logPath=$1
 # E.G. smtp://smtp.gmail.com:587
 export smtpServer=$2
-# E.G. alex.working.space2@gmail.com
+# E.G. working@gmail.com
 export smtpUser=$3
 export senderName=$4
 export smtpRcpt=$5
